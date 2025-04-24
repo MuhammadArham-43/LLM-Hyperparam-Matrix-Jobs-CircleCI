@@ -1,0 +1,51 @@
+version: 2.1
+
+executors:
+  python-executor:
+    docker:
+      - image: cimg/python:3.10
+    working_directory: ~/project
+
+jobs:
+  train:
+    executor: python-executor
+    parameters:
+      learning_rate:
+        type: string
+      batch_size:
+        type: string
+      weight_decay:
+        type: string
+      lr_scheduler_type:
+        type: string
+    steps:
+      - checkout
+
+      - run:
+          name: Set up Python
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+      - run:
+          name: Train with current hyperparameters
+          command: |
+            . venv/bin/activate
+            python train.py \
+              --learning_rate << parameters.learning_rate >> \
+              --batch_size << parameters.batch_size >> \
+              --epochs << parameters.epochs >> \
+              --lr_scheduler_type << parameters.lr_scheduler_type >>
+
+workflows:
+  train-matrix:
+    jobs:
+      - train:
+          matrix:
+            parameters:
+              learning_rate: ["1e-4", "5e-5", "1e-5"]
+              batch_size: ["4", "8"]
+              epochs: ["5", "10"]
+              lr_scheduler_type: ["linear", "cosine"]
