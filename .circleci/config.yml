@@ -14,7 +14,7 @@ jobs:
         type: string
       batch_size:
         type: string
-      weight_decay:
+      epochs:
         type: string
       lr_scheduler_type:
         type: string
