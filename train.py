@@ -37,10 +37,10 @@ def main(args):
         sys.exit(1)
 
     timestamp = time.strftime("%Y%m%d-%H")
-    print(timestamp)
     wandb.init(
         project="llm-hyperparam-tuning",
-        group=timestamp
+        group=timestamp,
+        name=str(uuid.uuid4())
     )
     wandb.log({"hyperparameters": vars(args)})
 
@@ -63,7 +63,6 @@ def main(args):
     model = GPT2ForSequenceClassification.from_pretrained("distilgpt2", num_labels=6)
     model.config.pad_token_id = model.config.eos_token_id
 
-    # Step 5: Training arguments
     training_args = TrainingArguments(
         output_dir="./results",
         per_device_train_batch_size=args.batch_size,
@@ -88,7 +87,6 @@ def main(args):
         tokenizer=tokenizer
     )
 
-    # Step 7: Train and Evaluate
     trainer.train()
     metrics = trainer.evaluate()
     wandb.log(metrics)
