@@ -49,7 +49,7 @@ workflows:
           # Set possible values of hyperparameters. Spawns differents jobs based on all combinations
           matrix: 
             parameters:
-              learning_rate: ["1e-4", "5e-5", "1e-5"]
+              learning_rate: ["1e-4", "1e-5"]
               batch_size: ["4", "8"]
               epochs: ["5", "10"]
               lr_scheduler_type: ["linear", "cosine"]
