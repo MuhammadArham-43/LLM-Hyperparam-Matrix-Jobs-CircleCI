@@ -51,5 +51,5 @@ workflows:
             parameters:
               learning_rate: ["1e-4", "1e-5"]
               batch_size: ["4", "8"]
-              epochs: ["5", "10"]
+              epochs: ["2", "4"]
               lr_scheduler_type: ["linear", "cosine"]
